@@ -1,0 +1,12 @@
+{
+  "name": "altostra-template-scalable-webhook",
+  "version": "1.0.0",
+  "description": "Altostra Scalable Webhook template example",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "alto build"
+  },
+  "author": "Altostra, Inc",
+  "license": "See LICENSE"
+}

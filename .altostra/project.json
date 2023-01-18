@@ -1,0 +1,144 @@
+{
+  "id": "scalable-webhook-2v00f4s",
+  "name": "scalable-webhook",
+  "type": "altostra",
+  "description": "Template for a Scalable Webhook pattern",
+  "created": "2023-01-18T15:08:18.560Z",
+  "blueprints": [
+    {
+      "connections": {
+        "ApiEndpoint01": {
+          "RequestsVerifier01": {
+            "from": "ApiEndpoint01",
+            "to": "RequestsVerifier01",
+            "type": "connection.trigger"
+          }
+        },
+        "RequestsProcessor01": {
+          "RequestsTable01": {
+            "accessLevel": "read-write",
+            "from": "RequestsProcessor01",
+            "to": "RequestsTable01",
+            "type": "connection.resource-access"
+          }
+        },
+        "RequestsQueue01": {
+          "RequestsProcessor01": {
+            "from": "RequestsQueue01",
+            "to": "RequestsProcessor01",
+            "type": "connection.trigger"
+          }
+        },
+        "RequestsVerifier01": {
+          "RequestsQueue01": {
+            "accessLevel": "read-write",
+            "from": "RequestsVerifier01",
+            "to": "RequestsQueue01",
+            "type": "connection.resource-access"
+          }
+        }
+      },
+      "id": "scalable-webhook-2v00f4s",
+      "metadata": {
+        "designer": {
+          "resourcePositions": {
+            "ApiGateway01": {
+              "x": 123,
+              "y": 319,
+              "z": 0
+            },
+            "RequestsProcessor01": {
+              "x": 956,
+              "y": 350.99999618530273,
+              "z": 0
+            },
+            "RequestsQueue01": {
+              "x": 690,
+              "y": 352,
+              "z": 0
+            },
+            "RequestsTable01": {
+              "x": 1245.3735656738281,
+              "y": 349.7912063598633,
+              "z": 0
+            },
+            "RequestsVerifier01": {
+              "x": 413,
+              "y": 352,
+              "z": 0
+            }
+          }
+        }
+      },
+      "name": "scalable-webhook",
+      "resources": {
+        "ApiEndpoint01": {
+          "api": {
+            "id": "ApiGateway01",
+            "type": "ref"
+          },
+          "id": "ApiEndpoint01",
+          "method": "POST",
+          "name": "api-endpoint-0",
+          "path": "/messages",
+          "type": "resource.api.endpoint"
+        },
+        "ApiGateway01": {
+          "cors": {
+            "type": "api.cors.simple",
+            "origins": "*"
+          },
+          "endpoints": [
+            {
+              "id": "ApiEndpoint01",
+              "type": "ref"
+            }
+          ],
+          "id": "ApiGateway01",
+          "name": "ApiGateway",
+          "type": "resource.api"
+        },
+        "RequestsProcessor01": {
+          "entryPoint": "functions/requestsProcessor.handler",
+          "id": "RequestsProcessor01",
+          "memory": 512,
+          "name": "requests-processor",
+          "runtime": "nodejs16.x",
+          "timeout": 6,
+          "type": "resource.compute.function"
+        },
+        "RequestsQueue01": {
+          "delay": 0,
+          "id": "RequestsQueue01",
+          "maxMessageSize": 262144,
+          "name": "requests-queue",
+          "retentionPeriod": 345600,
+          "type": "resource.message-queue"
+        },
+        "RequestsTable01": {
+          "id": "RequestsTable01",
+          "key": "id",
+          "name": "requests-table",
+          "tableName": "RequestsTable",
+          "throughput": {
+            "readUnits": 5,
+            "writeUnits": 5
+          },
+          "type": "resource.table.simple"
+        },
+        "RequestsVerifier01": {
+          "entryPoint": "functions/requestsVerifier.handler",
+          "id": "RequestsVerifier01",
+          "layers": [],
+          "memory": 512,
+          "name": "requests-verifier",
+          "runtime": "nodejs16.x",
+          "timeout": 6,
+          "type": "resource.compute.function"
+        }
+      },
+      "unsafe": false,
+      "version": "2019-10-24"
+    }
+  ]
+}
